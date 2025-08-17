@@ -1,0 +1,15 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "PutItem",
+  "key" : {
+    "id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+  },
+  "attributeValues" : {
+    "correo": $util.dynamodb.toDynamoDBJson($ctx.args.input.correo),
+    "curp": $util.dynamodb.toDynamoDBJson($ctx.args.input.curp),
+    "escuelaID": $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID),
+    "materias": $util.dynamodb.toDynamoDBJson($ctx.args.input.materias),
+    "nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
+    "telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono)
+  }
+}

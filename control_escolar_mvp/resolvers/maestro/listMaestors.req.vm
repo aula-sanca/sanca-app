@@ -1,0 +1,11 @@
+{
+  "version": "2018-05-29",
+  "operation": "Query",
+  "index": "escuelaID-index",
+  "query": {
+    "expression": "escuelaID = :e",
+    "expressionValues": {
+      ":e": $util.dynamodb.toDynamoDBJson($ctx.args.escuelaID)
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "version": "2018-05-29",
+  "operation": "UpdateItem",
+  "key": {
+    "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+  },
+  "update": {
+    "expression": "SET #cct = :cct, #entidad = :entidad, #localidad = :localidad, #municipio = :municipio, #nivel = :nivel, #nombre = :nombre, #turno = :turno",
+    "expressionNames": {
+      "#cct": "cct",
+      "#entidad": "entidad",
+      "#localidad": "localidad",
+      "#municipio": "municipio",
+      "#nivel": "nivel",
+      "#nombre": "nombre",
+      "#turno": "turno"
+    },
+    "expressionValues": {
+      ":cct": $util.dynamodb.toDynamoDBJson($ctx.args.input.cct),
+      ":entidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.entidad),
+      ":localidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.localidad),
+      ":municipio": $util.dynamodb.toDynamoDBJson($ctx.args.input.municipio),
+      ":nivel": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel),
+      ":nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
+      ":turno": $util.dynamodb.toDynamoDBJson($ctx.args.input.turno)
+    }
+  },
+  "condition": {
+    "expression": "attribute_exists(id)"
+  }
+}

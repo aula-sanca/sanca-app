@@ -1,0 +1,16 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "PutItem",
+  "key" : {
+    "id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+  },
+  "attributeValues" : {
+    "cct": $util.dynamodb.toDynamoDBJson($ctx.args.input.cct),
+    "entidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.entidad),
+    "localidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.localidad),
+    "municipio": $util.dynamodb.toDynamoDBJson($ctx.args.input.municipio),
+    "nivel": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel),
+    "nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
+    "turno": $util.dynamodb.toDynamoDBJson($ctx.args.input.turno)
+  }
+}
