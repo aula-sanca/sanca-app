@@ -1,0 +1,39 @@
+## CreateAlumno Request Mapping
+{
+  "version": "2017-02-28",
+  "operation": "PutItem",
+  "key": {
+    "id": $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+  },
+
+  #set($nombreObj = {
+  "primer_nombre": $ctx.args.input.nombre.primer_nombre,
+  "apellido_paterno": $ctx.args.input.nombre.apellido_paterno
+    })
+
+  #if($ctx.args.input.nombre.apellido_materno)
+    #set($nombreObj.apellido_materno = $ctx.args.input.nombre.apellido_materno)
+  #end
+  
+  #if($ctx.args.input.nombre.segundo_nombre)
+    #set($nombreObj.segundo_nombre = $ctx.args.input.nombre.segundo_nombre)    
+  #end
+
+  "attributeValues": {
+    #if($ctx.args.input.curp)
+      "curp": $util.dynamodb.toDynamoDBJson($ctx.args.input.curp),
+    #end
+    "escuelaID": $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID),
+    "gradoID": $util.dynamodb.toDynamoDBJson($ctx.args.input.gradoID),
+    #if($ctx.args.input.matricula)
+      "matricula": $util.dynamodb.toDynamoDBJson($ctx.args.input.matricula),
+    #end
+    #if($ctx.args.input.fecha_nacimiento)
+      "fecha_nacimiento": $util.dynamodb.toDynamoDBJson($ctx.args.input.fecha_nacimiento),
+    #end
+    "nombre": $util.dynamodb.toDynamoDBJson($nombreObj),
+    #if($ctx.args.input.tutorIDs && $ctx.args.input.tutorIDs.size() > 0)
+      "tutorIDs": $util.dynamodb.toDynamoDBJson($ctx.args.input.tutorIDs),
+    #end
+  }
+}

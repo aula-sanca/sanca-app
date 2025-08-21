@@ -1,0 +1,23 @@
+{
+  "version": "2018-05-29",
+  "operation": "UpdateItem",
+  "key": {
+    "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+  },
+  "update": {
+    "expression": "SET #correo = :correo, #nombre = :nombre, #telefono = :telefono",
+    "expressionNames": {
+      "#correo": "correo",     
+      "#nombre": "nombre",
+      "#telefono": "telefono"
+    },
+    "expressionValues": {
+      ":correo": $util.dynamodb.toDynamoDBJson($ctx.args.input.correo),      
+      ":nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
+      ":telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono)
+    }
+  },
+  "condition": {
+    "expression": "attribute_exists(id)"
+  }
+}

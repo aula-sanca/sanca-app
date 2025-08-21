@@ -1,0 +1,78 @@
+## UpdateAlumno Request Mapping
+
+## Inicialización de variables
+#set($updateExpression = "SET")
+#set($expressionNames = {})
+#set($expressionValues = {})
+#set($updates = [])
+
+## Actualizar campos simples
+#if($ctx.args.input.curp)
+  #set($updates = $updates + ["curp = :curp"])
+  $!{expressionValues.put(":curp", $util.dynamodb.toDynamoDBJson($ctx.args.input.curp))}
+#end
+
+#if($ctx.args.input.escuelaID)
+  #set($updates = $updates + ["escuelaID = :escuelaID"])
+  $!{expressionValues.put(":escuelaID", $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID))}
+#end
+
+#if($ctx.args.input.fecha_nacimiento)
+  #set($updates = $updates + ["fecha_nacimiento = :fecha_nacimiento"])
+  $!{expressionValues.put(":fecha_nacimiento", $util.dynamodb.toDynamoDBJson($ctx.args.input.fecha_nacimiento))}
+#end
+
+#if($ctx.args.input.gradoID)
+  #set($updates = $updates + ["gradoID = :gradoID"])
+  $!{expressionValues.put(":gradoID", $util.dynamodb.toDynamoDBJson($ctx.args.input.gradoID))}
+#end
+
+#if($ctx.args.input.matricula)
+  #set($updates = $updates + ["matricula = :matricula"])
+  $!{expressionValues.put(":matricula", $util.dynamodb.toDynamoDBJson($ctx.args.input.matricula))}
+#end
+
+#if($ctx.args.input.tutorIDs)
+  #set($updates = $updates + ["tutorIDs = :tutorIDs"])
+  $!{expressionValues.put(":tutorIDs", $util.dynamodb.toDynamoDBJson($ctx.args.input.tutorIDs))}
+#end
+
+## MAPEO PARA ACTUALIZAR OBJETO NOMBRE
+#if($ctx.args.input.nombre)
+  #set($nombreObj = {})
+  #if($util.isNullOrEmpty($ctx.args.input.nombre.primer_nombre) == false)
+    #set($nombreObj.primer_nombre = $ctx.args.input.nombre.primer_nombre)
+  #end
+  #if($util.isNullOrEmpty($ctx.args.input.nombre.segundo_nombre) == false)
+    #set($nombreObj.segundo_nombre = $ctx.args.input.nombre.segundo_nombre)
+  #end
+  #if($util.isNullOrEmpty($ctx.args.input.nombre.apellido_paterno) == false)
+    #set($nombreObj.apellido_paterno = $ctx.args.input.nombre.apellido_paterno)
+  #end
+  #if($util.isNullOrEmpty($ctx.args.input.nombre.apellido_materno) == false)
+    #set($nombreObj.apellido_materno = $ctx.args.input.nombre.apellido_materno)
+  #end
+  
+  #set($updates = $updates + ["nombre = :nombre"])
+  $!{expressionValues.put(":nombre", $util.dynamodb.toDynamoDBJson($nombreObj))}
+#end
+
+## Siempre actualizar updatedAt
+#set($updates = $updates + ["updatedAt = :updatedAt"])
+$!{expressionValues.put(":updatedAt", $util.dynamodb.toDynamoDBJson($util.time.nowISO8601()))}
+
+## Construcción final del UpdateExpression
+#set($joinedUpdates = $util.list.join($updates, ", "))
+#set($finalUpdateExpression = "$updateExpression $joinedUpdates")
+
+#set($payload = {
+  "version": "2017-02-28",
+  "operation": "UpdateItem",
+  "key": {
+    "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+  },
+  "updateExpression": $finalUpdateExpression,
+  "expressionAttributeValues": $util.toJson($expressionValues)
+})
+
+$util.toJson($payload)

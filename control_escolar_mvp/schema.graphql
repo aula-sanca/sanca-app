@@ -3,25 +3,29 @@ schema {
   mutation: Mutation
 }
 
+type NombreCompleto {
+  primer_nombre: String!
+  segundo_nombre: String
+  apellido_paterno: String!
+  apellido_materno: String
+}
+
 type Alumno {
+  id: ID!
   curp: String
   escuelaID: ID!
   fecha_nacimiento: AWSDate
-  grado: String!
-  grupo: String!
-  id: ID!
+  gradoID: ID!  
   matricula: String
-  nombre: String!
+  nombre: NombreCompleto!
   tutorIDs: [ID!]
 }
 
 type Asistencia {
   alumnoID: ID!
-  claseID: ID!
-  createdAt: AWSDateTime
-  estado: EstadoAsistencia!
   fecha: AWSDate!
-  id: ID!
+  createdAt: AWSDateTime
+  estado: EstadoAsistencia!  
 }
 
 type Calificacion {
@@ -34,14 +38,21 @@ type Calificacion {
   periodo: PeriodoEvaluacion!
 }
 
-type Clase {
+type Grado {
   escuelaID: ID!
   grado: String!
   grupo: String!
   horario: String
-  id: ID!
+  id: ID!  
+}
+
+type Clase {
+  gradoID: ID!
+  materiaID: ID!
+  escuelaID: ID!  
+  hora_inicio: String
+  hora_fin: String  
   maestroID: ID!
-  materia: String!
 }
 
 type Escuela {
@@ -113,8 +124,8 @@ type Query {
 }
 
 type Tutor {
-  correo: String
   id: ID!
+  correo: String!  
   nombre: String!
   telefono: String
 }
@@ -132,15 +143,21 @@ enum PeriodoEvaluacion {
   PARCIAL2
 }
 
+input NombreCompletoInput {
+  primer_nombre: String!
+  segundo_nombre: String
+  apellido_paterno: String!
+  apellido_materno: String
+}
+
 input AlumnoInput {
+  id: ID!
   curp: String
   escuelaID: ID!
   fecha_nacimiento: AWSDate
-  grado: String!
-  grupo: String!
-  id: ID
+  gradoID: ID!  
   matricula: String
-  nombre: String!
+  nombre: NombreCompletoInput!
   tutorIDs: [ID!]
 }
 
@@ -194,8 +211,8 @@ input MaestroInput {
 }
 
 input TutorInput {
-  correo: String
-  id: ID
+  id: ID!
+  correo: String!  
   nombre: String!
   telefono: String
 }
