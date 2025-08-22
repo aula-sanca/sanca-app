@@ -8,4 +8,13 @@
       ":e": $util.dynamodb.toDynamoDBJson($ctx.args.escuelaID)
     }
   }
+  #if($ctx.args.gradoID)
+  ,
+  "filter": {
+    "expression": "attribute_exists(gradoID) AND gradoID = :g",
+    "expressionValues": {
+      ":g": $util.dynamodb.toDynamoDBJson($ctx.args.gradoID)
+    }
+  }
+  #end
 }

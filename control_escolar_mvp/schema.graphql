@@ -94,7 +94,7 @@ type Mutation {
   deleteEscuela(id: ID!): Boolean!
   deleteMaestro(id: ID!): Boolean!
   deleteTutor(id: ID!): Boolean!
-  updateAlumno(id: ID!, input: AlumnoInput!): Alumno!
+  updateAlumno(id: ID!, input: UpdateAlumnoInput!): Alumno!
   updateAsistencia(id: ID!, input: AsistenciaInput!): Asistencia!
   updateCalificacion(id: ID!, input: CalificacionInput!): Calificacion!
   updateClase(id: ID!, input: ClaseInput!): Clase!
@@ -112,7 +112,7 @@ type Query {
   getEscuela(id: ID!): Escuela
   getMaestro(id: ID!): Maestro
   getTutor(id: ID!): Tutor
-  listAlumnos(escuelaID: ID!, grado: String, grupo: String): [Alumno!]!
+  listAlumnos(escuelaID: ID!, gradoID: String): [Alumno!]!
   listAsistenciasPorAlumno(alumnoID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
   listAsistenciasPorClase(claseID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
   listCalificacionesPorAlumno(alumnoID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
@@ -152,6 +152,16 @@ input NombreCompletoInput {
 
 input AlumnoInput {
   id: ID!
+  curp: String
+  escuelaID: ID!
+  fecha_nacimiento: AWSDate
+  gradoID: ID!  
+  matricula: String
+  nombre: NombreCompletoInput!
+  tutorIDs: [ID!]
+}
+
+input UpdateAlumnoInput {
   curp: String
   escuelaID: ID!
   fecha_nacimiento: AWSDate
