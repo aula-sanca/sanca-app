@@ -5,14 +5,17 @@
     "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
   },
   "update": {
-    "expression": "SET #correo = :correo, #curp = :curp, #escuelaID = :escuelaID, #materias = :materias, #nombre = :nombre, #telefono = :telefono",
+    "expression": "SET #correo = :correo, #curp = :curp, #escuelaID = :escuelaID, #materias = :materias, #nombre = :nombre, #telefono = :telefono, #rfc = :rfc, #nivel_academico = :nivel_academico, #domicilio = :domicilio",
     "expressionNames": {
       "#correo": "correo",
       "#curp": "curp",
       "#escuelaID": "escuelaID",
       "#materias": "materias",
       "#nombre": "nombre",
-      "#telefono": "telefono"
+      "#telefono": "telefono",
+      "#rfc": "rfc",
+      "#nivel_academico": "nivel_academico",
+      "#domicilio": "domicilio"
     },
     "expressionValues": {
       ":correo": $util.dynamodb.toDynamoDBJson($ctx.args.input.correo),
@@ -20,7 +23,10 @@
       ":escuelaID": $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID),
       ":materias": $util.dynamodb.toDynamoDBJson($ctx.args.input.materias),
       ":nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
-      ":telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono)
+      ":telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono),
+      ":rfc": $util.dynamodb.toDynamoDBJson($ctx.args.input.rfc),
+      ":nivel_academico": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel_academico),
+      ":domicilio": $util.dynamodb.toDynamoDBJson($ctx.args.input.domicilio)
     }
   },
   "condition": {

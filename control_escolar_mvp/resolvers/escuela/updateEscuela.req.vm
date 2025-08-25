@@ -2,30 +2,21 @@
   "version": "2018-05-29",
   "operation": "UpdateItem",
   "key": {
-    "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+    "cct": $util.dynamodb.toDynamoDBJson($ctx.args.cct)
   },
   "update": {
-    "expression": "SET #cct = :cct, #entidad = :entidad, #localidad = :localidad, #municipio = :municipio, #nivel = :nivel, #nombre = :nombre, #turno = :turno",
-    "expressionNames": {
-      "#cct": "cct",
-      "#entidad": "entidad",
-      "#localidad": "localidad",
-      "#municipio": "municipio",
-      "#nivel": "nivel",
-      "#nombre": "nombre",
-      "#turno": "turno"
-    },
-    "expressionValues": {
-      ":cct": $util.dynamodb.toDynamoDBJson($ctx.args.input.cct),
+    "expression": "SET entidad = :entidad, municipio = :municipio, localidad = :localidad, nivel_escolar = :nivel_escolar, nombre = :nombre, direccion = :direccion, sostenimiento = :sostenimiento",
+    "expressionValues": {      
       ":entidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.entidad),
-      ":localidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.localidad),
       ":municipio": $util.dynamodb.toDynamoDBJson($ctx.args.input.municipio),
-      ":nivel": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel),
+      ":localidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.localidad),      
+      ":nivel_escolar": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel_escolar),
       ":nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
-      ":turno": $util.dynamodb.toDynamoDBJson($ctx.args.input.turno)
+      ":direccion": $util.dynamodb.toDynamoDBJson($ctx.args.input.direccion),
+      ":sostenimiento": $util.dynamodb.toDynamoDBJson($ctx.args.input.sostenimiento)
     }
   },
   "condition": {
-    "expression": "attribute_exists(id)"
+    "expression": "attribute_exists(cct)"
   }
 }

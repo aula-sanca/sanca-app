@@ -5,11 +5,15 @@
     "id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
   },
   "attributeValues" : {
-    "correo": $util.dynamodb.toDynamoDBJson($ctx.args.input.correo),
-    "curp": $util.dynamodb.toDynamoDBJson($ctx.args.input.curp),
     "escuelaID": $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID),
+    "curp": $util.dynamodb.toDynamoDBJson($ctx.args.input.curp),
+    "rfc": $util.dynamodb.toDynamoDBJson($ctx.args.input.rfc),
+    "nivel_academico": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel_academico),
+    "cedula": $util.dynamodb.toDynamoDBJson($ctx.args.input.cedula),
+    "correo": $util.dynamodb.toDynamoDBJson($ctx.args.input.correo),
+    "telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono),
     "materias": $util.dynamodb.toDynamoDBJson($ctx.args.input.materias),
     "nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
-    "telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono)
+    "domicilio": $util.dynamodb.toDynamoDBJson($ctx.args.input.domicilio)
   }
 }

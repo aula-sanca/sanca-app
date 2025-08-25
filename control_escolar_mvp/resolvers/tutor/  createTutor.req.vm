@@ -5,8 +5,11 @@
     "id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
   },
   "attributeValues" : {
+    "escuelaID": $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID),
     "correo": $util.dynamodb.toDynamoDBJson($ctx.args.input.correo),
     "nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
-    "telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono)
+    "telefono": $util.dynamodb.toDynamoDBJson($ctx.args.input.telefono),
+    "parentesco": $util.dynamodb.toDynamoDBJson($ctx.args.input.parentesco),
+    "domicilio": $util.dynamodb.toDynamoDBJson($ctx.args.input.domicilio)
   }
 }

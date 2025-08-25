@@ -3,11 +3,37 @@ schema {
   mutation: Mutation
 }
 
+enum EstadoAsistencia {
+  AUSENTE
+  JUSTIFICADO
+  PRESENTE
+  RETARDO
+}
+
+enum Nivel {
+  Primaria
+  Secundaria
+}
+
+enum PeriodoEvaluacion {
+  FINAL
+  PARCIAL1
+  PARCIAL2
+}
+
+enum Turno {
+  Matutino 
+  Vespertino
+  Nocturno
+  Discontinuo
+}
+
 type NombreCompleto {
   primer_nombre: String!
   segundo_nombre: String
   apellido_paterno: String!
   apellido_materno: String
+  nombre_completo: String
 }
 
 type Alumno {
@@ -21,11 +47,19 @@ type Alumno {
   tutorIDs: [ID!]
 }
 
+type AsistenciaClase {
+  materiaID: ID!
+  estado: EstadoAsistencia!
+}
+
 type Asistencia {
+  id: ID
   alumnoID: ID!
+  escuelaID: ID!
+  gradoID: ID!
   fecha: AWSDate!
+  estado: EstadoAsistencia!
   createdAt: AWSDateTime
-  estado: EstadoAsistencia!  
 }
 
 type Calificacion {
@@ -38,12 +72,20 @@ type Calificacion {
   periodo: PeriodoEvaluacion!
 }
 
-type Grado {
-  escuelaID: ID!
+type Grado{
+  id: ID!
+  escuelaID: ID! #indice 1
+  nivel: Nivel
+  turno: Turno!  #Matutino, Vespertino
   grado: String!
-  grupo: String!
-  horario: String
-  id: ID!  
+  grupo: String!  
+  materiaIDs: [ID!]!
+}
+
+type Materia {
+  id: ID!
+  campo_formativo: String
+  materia: String!
 }
 
 type Clase {
@@ -53,29 +95,56 @@ type Clase {
   hora_inicio: String
   hora_fin: String  
   maestroID: ID!
+  estado: EstadoAsistencia! 
+}
+
+type NivelEscolar {
+  nivel: Nivel!
+  turno: Turno!
 }
 
 type Escuela {
-  cct: String!
+  cct: ID
+  nivel_escolar: [NivelEscolar]!
   entidad: String
-  id: ID!
-  #  Matutino | Vespertino | Nocturno | Discontinuo
-  localidad: String
   municipio: String
-  nivel: String!
+  localidad: String
+  direccion: String
   nombre: String!
-  #  Preescolar | Primaria | Secundaria | Media Superior | Superior
-  turno: String!
+  sostenimiento: String #publico, privado
+}
+
+type Domicilio{
+  calle: String
+  numeroExterior: String
+  numeroInterior: String
+  colonia:  String
+  municipio: String
+  cp: String
 }
 
 type Maestro {
-  correo: String
-  curp: String!
+  id: ID
   escuelaID: ID!
-  id: ID!
+  curp: String!
+  rfc: String
+  nivel_academico: String
+  cedula: String
+  correo: String!
+  telefono: String!
   materias: [String]
+  nombre: NombreCompleto!
+  domicilio: String
+}
+
+type Tutor {
+  id: ID!
+  escuelaID: ID
+  correo: String!  
   nombre: String!
-  telefono: String
+  telefono: String!
+  parentesco: String!
+  domicilio: String
 }
 
 #  -------- Mutation --------
@@ -91,16 +160,16 @@ type Mutation {
   deleteAsistencia(id: ID!): Boolean!
   deleteCalificacion(id: ID!): Boolean!
   deleteClase(id: ID!): Boolean!
-  deleteEscuela(id: ID!): Boolean!
+  deleteEscuela(cct: ID!): Boolean!
   deleteMaestro(id: ID!): Boolean!
   deleteTutor(id: ID!): Boolean!
   updateAlumno(id: ID!, input: UpdateAlumnoInput!): Alumno!
   updateAsistencia(id: ID!, input: AsistenciaInput!): Asistencia!
   updateCalificacion(id: ID!, input: CalificacionInput!): Calificacion!
   updateClase(id: ID!, input: ClaseInput!): Clase!
-  updateEscuela(id: ID!, input: EscuelaInput!): Escuela!
-  updateMaestro(id: ID!, input: MaestroInput!): Maestro!
-  updateTutor(id: ID!, input: TutorInput!): Tutor!
+  updateEscuela(cct: ID!, input: UpdateEscuelaInput!): Escuela!
+  updateMaestro(id: ID!, input: UpdateMaestroInput!): Maestro!
+  updateTutor(id: ID!, input: UpdateTutorInput!): Tutor!
 }
 
 #  -------- Query --------
@@ -109,7 +178,7 @@ type Query {
   getAsistencia(id: ID!): Asistencia
   getCalificacion(id: ID!): Calificacion
   getClase(id: ID!): Clase
-  getEscuela(id: ID!): Escuela
+  getEscuela(cct: ID!): Escuela
   getMaestro(id: ID!): Maestro
   getTutor(id: ID!): Tutor
   listAlumnos(escuelaID: ID!, gradoID: String): [Alumno!]!
@@ -118,36 +187,20 @@ type Query {
   listCalificacionesPorAlumno(alumnoID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
   listCalificacionesPorClase(claseID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
   listClases(escuelaID: ID!, grado: String, grupo: String, maestroID: ID): [Clase!]!
-  listEscuelas(escuelaID: ID): [Escuela!]!
+  listEscuelas: [Escuela!]!
   listMaestros(escuelaID: ID!): [Maestro!]!
-  listTutores(limit: Int, nextToken: String): [Tutor!]!
+  listTutores(escuelaID: ID!): [Tutor!]!
+  listGrados(escuelaID: ID!): [Grado]
+  listMaterias: [Materia]
 }
 
-type Tutor {
-  id: ID!
-  correo: String!  
-  nombre: String!
-  telefono: String
-}
-
-enum EstadoAsistencia {
-  AUSENTE
-  JUSTIFICADO
-  PRESENTE
-  RETARDO
-}
-
-enum PeriodoEvaluacion {
-  FINAL
-  PARCIAL1
-  PARCIAL2
-}
-
+#  -------- Inputs --------
 input NombreCompletoInput {
-  primer_nombre: String!
+  primer_nombre: String
   segundo_nombre: String
-  apellido_paterno: String!
+  apellido_paterno: String
   apellido_materno: String
+  nombre_completo: String
 }
 
 input AlumnoInput {
@@ -198,31 +251,73 @@ input ClaseInput {
   materia: String!
 }
 
-#  -------- Inputs --------
-input EscuelaInput {
-  cct: String!
+input NivelEscolarInput{
+  nivel: Nivel
+  turno: Turno
+}
+
+input UpdateEscuelaInput{
+  nivel_escolar: [NivelEscolarInput]!
   entidad: String
-  id: ID
-  localidad: String
   municipio: String
-  nivel: String!
+  localidad: String
+  direccion: String  
   nombre: String!
-  turno: String!
+  sostenimiento: String
+}
+
+input EscuelaInput {
+  cct: ID!
+  nivel_escolar: [NivelEscolarInput]!
+  entidad: String
+  municipio: String
+  localidad: String
+  direccion: String  
+  nombre: String!
+  sostenimiento: String
+}
+
+input UpdateMaestroInput {  
+  escuelaID: ID!
+  curp: String!
+  rfc: String
+  nivel_academico: String
+  cedula: String
+  correo: String!
+  telefono: String!
+  materias: [String]
+  nombre: NombreCompletoInput!
+  domicilio: String
 }
 
 input MaestroInput {
+  id: ID!
+  escuelaID: ID! #
+  curp: String! #
+  rfc: String
+  nivel_academico: String
+  cedula: String
+  correo: String!  #
+  telefono: String! #
+  materias: [String] #
+  nombre: NombreCompletoInput! #
+  domicilio: String
+}
+
+input UpdateTutorInput {  
   correo: String
-  curp: String!
-  escuelaID: ID!
-  id: ID
-  materias: [String]
-  nombre: String!
+  nombre: String
   telefono: String
+  parentesco: String
+  domicilio: String
 }
 
 input TutorInput {
   id: ID!
+  escuelaID: ID!
   correo: String!  
   nombre: String!
-  telefono: String
+  telefono: String!
+  parentesco: String!
+  domicilio: String
 }

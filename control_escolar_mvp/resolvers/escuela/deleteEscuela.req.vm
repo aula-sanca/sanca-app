@@ -2,9 +2,9 @@
   "version": "2018-05-29",
   "operation": "DeleteItem",
   "key": {
-    "id": $util.dynamodb.toDynamoDBJson($ctx.args.id)
+    "cct": $util.dynamodb.toDynamoDBJson($ctx.args.cct)
   },
   "condition": {
-    "expression": "attribute_exists(id)"
+    "expression": "attribute_exists(cct)"
   }
 }

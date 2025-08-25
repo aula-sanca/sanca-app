@@ -2,15 +2,15 @@
   "version" : "2018-05-29",
   "operation" : "PutItem",
   "key" : {
-    "id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+    "cct" : $util.dynamodb.toDynamoDBJson($ctx.args.input.cct)
   },
   "attributeValues" : {
-    "cct": $util.dynamodb.toDynamoDBJson($ctx.args.input.cct),
+    "nivel_escolar": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel_escolar),
     "entidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.entidad),
-    "localidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.localidad),
     "municipio": $util.dynamodb.toDynamoDBJson($ctx.args.input.municipio),
-    "nivel": $util.dynamodb.toDynamoDBJson($ctx.args.input.nivel),
+    "localidad": $util.dynamodb.toDynamoDBJson($ctx.args.input.localidad),
+    "direccion": $util.dynamodb.toDynamoDBJson($ctx.args.input.direccion),
     "nombre": $util.dynamodb.toDynamoDBJson($ctx.args.input.nombre),
-    "turno": $util.dynamodb.toDynamoDBJson($ctx.args.input.turno)
+    "sostenimiento": $util.dynamodb.toDynamoDBJson($ctx.args.input.sostenimiento)
   }
 }
