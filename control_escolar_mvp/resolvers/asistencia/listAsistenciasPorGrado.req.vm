@@ -1,0 +1,11 @@
+{
+  "version": "2018-05-29",
+  "operation": "Query",
+  "index": "gradoID-index",
+  "query": {
+    "expression": "gradoID = :e",
+    "expressionValues": {
+      ":e": $util.dynamodb.toDynamoDBJson($ctx.args.gradoID)
+    }
+  }
+}

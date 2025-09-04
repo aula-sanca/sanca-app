@@ -1,0 +1,23 @@
+#set($fecha = $ctx.args.fecha)
+#if(!$util.isNull($fecha) && $fecha != "")
+  #set($finalFecha = $fecha)
+#else
+  ## Tomar solo YYYY-MM-DD de la fecha actual
+  #set($finalFecha = $util.time.nowISO8601().substring(0,10))
+#end
+
+{
+  "version" : "2017-02-28",
+  "operation" : "UpdateItem",
+  "key": {
+    "alumnoID": $util.dynamodb.toDynamoDBJson($ctx.args.alumnoID),
+    "fecha": $util.dynamodb.toDynamoDBJson($finalFecha)
+  },
+  "update": {
+    "expression": "SET estado = :estado, updatedAt = :updatedAt",
+    "expressionValues": {
+      ":estado": $util.dynamodb.toDynamoDBJson($ctx.args.input.estado),      
+      ":updatedAt": $util.dynamodb.toDynamoDBJson($util.time.nowISO8601())
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "PutItem",
+  "key" : {
+    "alumnoID" : $util.dynamodb.toDynamoDBJson($ctx.args.input.alumnoID)
+  },
+  "attributeValues" : {
+    "escuelaID": $util.dynamodb.toDynamoDBJson($ctx.args.input.escuelaID),
+    "gradoID": $util.dynamodb.toDynamoDBJson($ctx.args.input.gradoID),
+    "fecha": $util.dynamodb.toDynamoDBJson($ctx.args.input.fecha),
+    "estado": $util.dynamodb.toDynamoDBJson($ctx.args.input.estado),
+    "createdAt": $util.dynamodb.toDynamoDBJson($util.time.nowISO8601())
+  }
+}

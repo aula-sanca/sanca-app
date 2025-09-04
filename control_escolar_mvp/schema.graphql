@@ -52,14 +52,14 @@ type AsistenciaClase {
   estado: EstadoAsistencia!
 }
 
-type Asistencia {
-  id: ID
+type Asistencia {  
   alumnoID: ID!
   escuelaID: ID!
   gradoID: ID!
   fecha: AWSDate!
   estado: EstadoAsistencia!
   createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }
 
 type Calificacion {
@@ -157,16 +157,16 @@ type Mutation {
   createMaestro(input: MaestroInput!): Maestro!
   createTutor(input: TutorInput!): Tutor!
   deleteAlumno(id: ID!): Boolean!
-  deleteAsistencia(id: ID!): Boolean!
-  deleteCalificacion(id: ID!): Boolean!
-  deleteClase(id: ID!): Boolean!
+  deleteAsistencia(alumnoID: ID!, fecha: AWSDate): Boolean!
+  #deleteCalificacion(id: ID!): Boolean!
+  #deleteClase(id: ID!): Boolean!
   deleteEscuela(cct: ID!): Boolean!
   deleteMaestro(id: ID!): Boolean!
   deleteTutor(id: ID!): Boolean!
   updateAlumno(id: ID!, input: UpdateAlumnoInput!): Alumno!
-  updateAsistencia(id: ID!, input: AsistenciaInput!): Asistencia!
-  updateCalificacion(id: ID!, input: CalificacionInput!): Calificacion!
-  updateClase(id: ID!, input: ClaseInput!): Clase!
+  updateAsistencia(alumnoID: ID!, fecha: AWSDate! input: UpdateAsistenciaInput!): Asistencia
+  #updateCalificacion(id: ID!, input: CalificacionInput!): Calificacion!
+  #updateClase(id: ID!, input: ClaseInput!): Clase!
   updateEscuela(cct: ID!, input: UpdateEscuelaInput!): Escuela!
   updateMaestro(id: ID!, input: UpdateMaestroInput!): Maestro!
   updateTutor(id: ID!, input: UpdateTutorInput!): Tutor!
@@ -175,18 +175,20 @@ type Mutation {
 #  -------- Query --------
 type Query {
   getAlumno(id: ID!): Alumno
-  getAsistencia(id: ID!): Asistencia
-  getCalificacion(id: ID!): Calificacion
-  getClase(id: ID!): Clase
+  getAsistencia(alumnoID: ID!, fecha: AWSDate): Asistencia
+  #getCalificacion(id: ID!): Calificacion
+  #getClase(id: ID!): Clase
   getEscuela(cct: ID!): Escuela
   getMaestro(id: ID!): Maestro
   getTutor(id: ID!): Tutor
   listAlumnos(escuelaID: ID!, gradoID: String): [Alumno!]!
-  listAsistenciasPorAlumno(alumnoID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
-  listAsistenciasPorClase(claseID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
-  listCalificacionesPorAlumno(alumnoID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
-  listCalificacionesPorClase(claseID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
-  listClases(escuelaID: ID!, grado: String, grupo: String, maestroID: ID): [Clase!]!
+  listAsistenciasPorAlumno(alumnoID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]
+  listAsistenciasPorGrado(gradoID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
+  listAsistenciasPorEscuela(escuelaID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
+  #listAsistenciasPorClase(claseID: ID!, fechaDesde: AWSDate, fechaHasta: AWSDate): [Asistencia!]!
+  #listCalificacionesPorAlumno(alumnoID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
+  #listCalificacionesPorClase(claseID: ID!, periodo: PeriodoEvaluacion): [Calificacion!]!
+  #listClases(escuelaID: ID!, grado: String, grupo: String, maestroID: ID): [Clase!]!
   listEscuelas: [Escuela!]!
   listMaestros(escuelaID: ID!): [Maestro!]!
   listTutores(escuelaID: ID!): [Tutor!]!
@@ -224,12 +226,16 @@ input UpdateAlumnoInput {
   tutorIDs: [ID!]
 }
 
+input UpdateAsistenciaInput {  
+  estado: EstadoAsistencia!
+}
+
 input AsistenciaInput {
   alumnoID: ID!
-  claseID: ID!
-  estado: EstadoAsistencia!
+  escuelaID: ID!
+  gradoID: ID!
   fecha: AWSDate!
-  id: ID
+  estado: EstadoAsistencia!
 }
 
 input CalificacionInput {

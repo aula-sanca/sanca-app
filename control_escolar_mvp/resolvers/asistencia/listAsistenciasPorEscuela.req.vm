@@ -1,0 +1,34 @@
+#set($escuelaID = $ctx.args.escuelaID)
+#set($fechaDesde = $ctx.args.fechaDesde)
+#set($fechaHasta = $ctx.args.fechaHasta)
+
+#if(!$util.isNull($fechaDesde) && $fechaDesde != "" && !$util.isNull($fechaHasta) && $fechaHasta != "")
+  {
+    "version": "2018-05-29",
+    "operation": "Query",
+    "index": "escuelaID-index",
+    "query": {
+      "expression": "escuelaID = :e AND #fecha BETWEEN :fDesde AND :fHasta",
+      "expressionNames": {
+        "#fecha": "fecha"
+      },
+      "expressionValues": {
+        ":e": $util.dynamodb.toDynamoDBJson($escuelaID),
+        ":fDesde": $util.dynamodb.toDynamoDBJson($fechaDesde),
+        ":fHasta": $util.dynamodb.toDynamoDBJson($fechaHasta)
+      }
+    }
+  }
+#else
+  {
+    "version": "2018-05-29",
+    "operation": "Query",
+    "index": "escuelaID-index",
+    "query": {
+      "expression": "escuelaID = :e",
+      "expressionValues": {
+        ":e": $util.dynamodb.toDynamoDBJson($escuelaID)
+      }
+    }
+  }
+#end
