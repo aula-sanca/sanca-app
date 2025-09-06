@@ -1,0 +1,13 @@
+extends: default
+
+ignore: |
+  .yamllint
+  .cfnlintrc
+
+rules:
+  line-length:
+    max: 500
+    level: warning
+  indentation:
+    spaces: 2
+    indent-sequences: whatever

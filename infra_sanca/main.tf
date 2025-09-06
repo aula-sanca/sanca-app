@@ -1,0 +1,16 @@
+# --------------------------------------------
+# Proveedor de AWS en la región especificada
+# Se usa el profile "terraform" de AWS CLI, creado con aws configure
+# --------------------------------------------
+provider "aws" {
+  region = var.aws_region
+  profile = "terraform"
+}
+
+module "dynamodb" {
+  source = "./dynamodb"
+}
+
+module "lambdas" {
+  source = "./lambdas"
+}

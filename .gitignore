@@ -1,0 +1,65 @@
+# Archivos de estado y configuración local de Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+terraform.tfstate
+terraform.tfstate.*
+*.terraform.tfstate
+*.terraform.tfstate.*
+
+# Archivos de variables con valores sensibles
+*.tfvars
+*.tfvars.json
+terraform.tfvars
+terraform.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Archivos de plan de Terraform
+*.tfplan
+planfile.out
+terraform.plan
+
+# Archivos de bloqueo de estado
+.terraform.lock.hcl
+*.lock.hcl
+
+# Crash logs y archivos de debug
+crash.log
+crash.*.log
+terraform.temp.*
+*.debug
+
+# Directorios de plugins y caché
+.terraformrc
+terraform.rc
+.terraform.d/
+.terraform.providers/
+
+# Archivos de override (usualmente para configuraciones locales)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Archivos de entorno específico (pueden contener secrets)
+.env
+.env.*
+.venv/
+.env.local
+.env.production
+.env.development
+
+# Archivos de IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs y archivos temporales
+logs/
+*.log
+tmp/
+temp/
