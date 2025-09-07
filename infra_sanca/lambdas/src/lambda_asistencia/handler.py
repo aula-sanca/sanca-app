@@ -54,7 +54,6 @@ def mapear_respuesta_dynamo(response):
     
     return resultado
 
-
 def listAsistenciasPorAlumno(event:dict)->dict:
     """
     Consulta la asistencia de un alumno en DynamoDB, opcionalmente filtrando por rango de fechas   
@@ -98,14 +97,14 @@ def lambda_handler(event, context):
     method = event.get("httpMethod")
     path = event.get("path")
     
-    if method == "GET" and path == "/asistencia":
+    if method == "GET" and path == "/asistencias":
         body_response = listAsistenciasPorAlumno(event)
         return {
             "statusCode": 200,
             "body": json.dumps(body_response["items"])
         }
     
-    elif method == "POST" and path == "/asistencia":
+    elif method == "POST" and path == "/asistencias":
         return {
             "statusCode": 201,
             "body": json.dumps({"msg": "Crear asistencia"})

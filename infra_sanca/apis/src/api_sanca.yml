@@ -4,7 +4,7 @@ info:
   version: "1.0"
 
 paths:
-  /asistencia:
+  /asistencias:
     get:
       summary: "Consultar asistencia"
       parameters:
@@ -29,7 +29,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
 
     post:
       summary: "Crear asistencia"
@@ -39,9 +39,9 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
 
-  /asistencia/{id}:
+  /asistencias/{id}:
     get:
       summary: "Obtener asistencia por ID"
       parameters:
@@ -56,7 +56,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
 
     put:
       summary: "Actualizar asistencia"
@@ -72,7 +72,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
 
     delete:
       summary: "Borrar asistencia"
@@ -88,4 +88,4 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations

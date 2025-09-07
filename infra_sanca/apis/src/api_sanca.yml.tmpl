@@ -1,0 +1,91 @@
+openapi: "3.0.1"
+info:
+  title: "Asistencia API"
+  version: "1.0"
+
+paths:
+  /asistencias:
+    get:
+      summary: "Consultar asistencia"
+      parameters:
+        - name: "alumnoID"
+          in: "path"
+          required: true
+          schema:
+            type: string
+        - name: "fechaDesde"
+          in: "path"
+          required: false
+          schema:
+            type: string
+        - name: "fechaHasta"
+          in: "path"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+
+    post:
+      summary: "Crear asistencia"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+
+  /asistencias/{id}:
+    get:
+      summary: "Obtener asistencia por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+
+    put:
+      summary: "Actualizar asistencia"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+
+    delete:
+      summary: "Borrar asistencia"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations

@@ -14,3 +14,8 @@ module "dynamodb" {
 module "lambdas" {
   source = "./lambdas"
 }
+
+module "apis" {
+  source = "./apis"
+  asistencia_lambda_arn = module.lambdas.asistencia_lambda_arn  
+}
