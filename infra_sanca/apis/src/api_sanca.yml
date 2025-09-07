@@ -159,3 +159,73 @@ paths:
         type: "aws_proxy"
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_escuela_arn}/invocations
+
+  /maestros:
+    get:
+      summary: "Consultar maestros"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_maestros_arn}/invocations
+
+    post:
+      summary: "Crear maestros"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_maestros_arn}/invocations
+
+  /maestros/{id}:
+    get:
+      summary: "Obtener maestros por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_maestros_arn}/invocations
+
+    put:
+      summary: "Actualizar maestro"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_maestros_arn}/invocations
+
+    delete:
+      summary: "Borrar maestro"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_maestros_arn}/invocations

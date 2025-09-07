@@ -19,4 +19,5 @@ module "apis" {
   source = "./apis"
   asistencia_lambda_arn = module.lambdas.asistencia_lambda_arn
   escuela_lambda_arn = module.lambdas.escuela_lambda_arn
+  maestros_lambda_arn = module.lambdas.maestros_lambda_arn
 }

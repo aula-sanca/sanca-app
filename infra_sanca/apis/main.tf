@@ -3,7 +3,8 @@ resource "aws_api_gateway_rest_api" "sanca_api" {
   name = "SancaAPI"
   body = templatefile("${path.module}/src/api_sanca.yml.tmpl", {
     lambda_asistencia_arn = var.asistencia_lambda_arn,
-    lambda_escuela_arn = var.escuela_lambda_arn
+    lambda_escuela_arn = var.escuela_lambda_arn,
+    lambda_maestros_arn = var.maestros_lambda_arn
   })
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -18,7 +19,8 @@ resource "aws_api_gateway_deployment" "sanca_deploy" {
   triggers = {
     redeployment = sha1(templatefile("${path.module}/src/api_sanca.yml.tmpl", {
       lambda_asistencia_arn = var.asistencia_lambda_arn,
-      lambda_escuela_arn = var.escuela_lambda_arn
+      lambda_escuela_arn = var.escuela_lambda_arn,
+      lambda_maestros_arn = var.maestros_lambda_arn
     }))
   }
 }
@@ -64,6 +66,15 @@ resource "aws_lambda_permission" "apigw_invoke_lambda_escuela" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = var.escuela_lambda_arn  
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.sanca_api.execution_arn}/*/*"
+}
+
+# Permitir que API Gateway invoque el Lambda
+resource "aws_lambda_permission" "apigw_invoke_lambda_maestros" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = var.maestros_lambda_arn
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.sanca_api.execution_arn}/*/*"
 }
