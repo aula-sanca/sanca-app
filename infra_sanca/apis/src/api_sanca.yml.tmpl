@@ -29,7 +29,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
     post:
       summary: "Crear asistencia"
@@ -39,7 +39,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
   /asistencias/{id}:
     get:
@@ -56,7 +56,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
     put:
       summary: "Actualizar asistencia"
@@ -72,7 +72,7 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
     delete:
       summary: "Borrar asistencia"
@@ -88,4 +88,74 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws_proxy"
         httpMethod: "POST"
-        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
+
+  /escuelas:
+    get:
+      summary: "Consultar escuelas"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_escuela_arn}/invocations
+
+    post:
+      summary: "Crear escuelas"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_escuela_arn}/invocations
+
+  /escuelas/{id}:
+    get:
+      summary: "Obtener escuela por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_escuela_arn}/invocations
+
+    put:
+      summary: "Actualizar escuela"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_escuela_arn}/invocations
+
+    delete:
+      summary: "Borrar escuela"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_escuela_arn}/invocations

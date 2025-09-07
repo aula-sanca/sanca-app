@@ -11,9 +11,9 @@ for dir in $SRC_DIR/*/ ; do
   lambda_name=$(basename "$dir")
 
   # Eliminar zip previo si existe
-  if [ -f "$lambda_name" ]; then
-    echo "Elminando zip previo $lambda_name ..."
-    rm "$lambda_name"
+  if [ -f "${lambda_name}.zip" ]; then
+    echo "Elminando zip previo "${lambda_name}.zip" ..."
+    rm "${lambda_name}.zip"
   fi
 
   echo "Empaquetando $lambda_name ..."
