@@ -3,7 +3,7 @@ import boto3
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 import json
-import datetime
+from datetime import datetime
 
 # Inicializa el cliente de DynamoDB
 dynamodb = boto3.resource('dynamodb')
@@ -62,7 +62,7 @@ def createRegistro(event:dict)->dict:
     bodyRq = json.loads(event.get("body"))
     
     # Genera las marcas de tiempo en formato ISO8601
-    now_iso = datetime.datetime.now().isoformat()
+    now_iso = datetime.now().isoformat()
 
     bodyRq["createdAt"] = now_iso
 
@@ -85,15 +85,15 @@ def updateRegistro(event:dict)->dict:
     bodyRq = json.loads(event.get("body"))
     
     # Genera las marcas de tiempo en formato ISO8601
-    now_iso = datetime.datetime.now().isoformat()
+    now_iso = datetime.now().isoformat()
     bodyRs = {}
 
     try:
         # Extraer la clave primaria (id) y los datos de entrada
-        alumnoID = event.get('pathParameters', {}).get('id')
+        alumnoID = event.get('pathParameters', {}).get('alumnoID')
         fecha = bodyRq.get("fecha",None)
         # Replicar la lógica del VTL para la fecha
-        final_fecha = fecha if fecha and fecha.strip() else datetime.datetime.now().isoformat()[:10]
+        final_fecha = fecha if fecha and fecha.strip() else datetime.now().isoformat()[:10]
 
         print(f"alumnoID: {alumnoID}")    
 
@@ -136,7 +136,7 @@ def updateRegistro(event:dict)->dict:
             },
             ExpressionAttributeValues={
                 ':estado': bodyRq.get('estado'),
-                ':updatedAt': datetime.datetime.now().isoformat()
+                ':updatedAt': datetime.now().isoformat()
             },
             ReturnValues="ALL_NEW"
         )
@@ -229,8 +229,9 @@ def listRegistrosPorId(event:dict)->dict:
 
             # Caso 2: Si solo viene fecha_desde o ambas son iguales -> buscar ese día
             elif fecha_desde:
+                fecha_actual = datetime.now().strftime('%Y-%m-%d')
                 response = table.query(
-                    KeyConditionExpression=Key("alumnoID").eq(alumnoID) & Key("fecha").eq(fecha_desde)
+                    KeyConditionExpression=Key("alumnoID").eq(alumnoID) & Key("fecha").between(fecha_desde, fecha_actual)
                 )
 
             # Caso 3: Solo alumnoID (sin rango de fechas)
@@ -246,9 +247,10 @@ def listRegistrosPorId(event:dict)->dict:
                     KeyConditionExpression=Key("escuelaID").eq(escuelaID) & Key("fecha").between(fecha_desde, fecha_hasta)
                 )
             elif fecha_desde:
+                fecha_actual = datetime.now().strftime('%Y-%m-%d')
                 response = table.query(
                     IndexName="escuelaID-fecha-index",
-                    KeyConditionExpression=Key("escuelaID").eq(escuelaID) & Key("fecha").eq(fecha_desde)
+                    KeyConditionExpression=Key("escuelaID").eq(escuelaID) & Key("fecha").between(fecha_desde, fecha_actual)
                 )
             else:
                 response = table.query(
@@ -260,17 +262,18 @@ def listRegistrosPorId(event:dict)->dict:
             if fecha_desde and fecha_hasta and fecha_desde != fecha_hasta:
                 response = table.query(
                     IndexName="gradoID-fecha-index",
-                    KeyConditionExpression=Key("gradoID").eq(escuelaID) & Key("fecha").between(fecha_desde, fecha_hasta)
+                    KeyConditionExpression=Key("gradoID").eq(gradoID) & Key("fecha").between(fecha_desde, fecha_hasta)
                 )
             elif fecha_desde:
+                fecha_actual = datetime.now().strftime('%Y-%m-%d')
                 response = table.query(
                     IndexName="gradoID-fecha-index",
-                    KeyConditionExpression=Key("gradoID").eq(escuelaID) & Key("fecha").eq(fecha_desde)
+                    KeyConditionExpression=Key("gradoID").eq(gradoID) & Key("fecha").between(fecha_desde, fecha_actual)
                 )
             else:
                 response = table.query(
                     IndexName="gradoID-fecha-index",
-                    KeyConditionExpression=Key("gradoID").eq(escuelaID)
+                    KeyConditionExpression=Key("gradoID").eq(gradoID)
                 )
 
         # Devuelve la lista de elementos encontrados
@@ -295,54 +298,29 @@ def listRegistrosPorId(event:dict)->dict:
                 "message": "Ocurrió un error inesperado al procesar la solicitud."
             })
         }
-
-def getId(event:dict)->dict:
-   
-    try:
-        # Extrae la clave primaria 'id' del evento
-        id = event.get('pathParameters', {}).get('id')
-
-        if not id:
-            raise ValueError("El argumento 'id' es obligatorio.")
-
-        # Realiza la operación GetItem para obtener un solo registro
-        response = table.get_item(
-            Key={
-                'alumnoID': id
-            }
-        )
-        
-        # Retorna el item si se encuentra, de lo contrario retorna None
-        return response["Item"]
-        
-    except ClientError as e:
-        print(f"Error al obtener el registro de DynamoDB: {e.response['Error']['Message']}")
-        return {
-                "error": "Error interno",
-                "message": e.response['Error']['Message']
-            }
-        
-    except Exception as e:
-        print(f"Error inesperado: {str(e)}")
-        return {
-                "error": "Error inesperado",
-                "message": "Ocurrió un error inesperado al procesar la solicitud."
-            }
         
 def deleteRegistro(event:dict)->dict:
     
     try:
-        id = event.get('pathParameters', {}).get('id')
+        alumnoID = event.get('pathParameters', {}).get('alumnoID')
+        if event.get("queryStringParameters",None):
+            fecha= event.get("queryStringParameters",{}).get('fecha',None)            
+        else:
+            fecha = None            
 
-        if not id:
-            raise ValueError("El argumento 'id' es obligatorio.")
+        if not alumnoID:
+            raise ValueError("El argumento 'alumnoID' es obligatorio.")
         
+        # Lógica para determinar la fecha, igual que en el VTL
+        final_fecha = fecha if fecha and fecha.strip() else datetime.now().isoformat()[:10]
+
         # Realiza la operación DeleteItem
         response = table.delete_item(
             Key={
-                'id': id
+                'alumnoID': alumnoID,
+                'fecha': final_fecha
             },
-            ConditionExpression="attribute_exists(id)",
+            ConditionExpression="attribute_exists(alumnoID) AND attribute_exists(fecha)",
             ReturnValues="ALL_OLD"
         )
         

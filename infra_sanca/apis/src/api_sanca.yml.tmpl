@@ -41,7 +41,7 @@ paths:
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
-  /asistencias/{alumnoID}:
+  /asistencias/alumno/{alumnoID}:
     get:
       summary: "Obtener asistencia por ID"
       parameters:
@@ -100,7 +100,7 @@ paths:
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
-  /asistencias/{escuelaID}:
+  /asistencias/escuela/{escuelaID}:
     get:
       summary: "Obtener asistencia por ID"
       parameters:
@@ -127,7 +127,7 @@ paths:
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
-  /asistencias/{gradoID}:
+  /asistencias/grado/{gradoID}:
     get:
       summary: "Obtener asistencia por ID"
       parameters:
