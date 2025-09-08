@@ -503,3 +503,73 @@ paths:
         type: "aws_proxy"
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_grados_arn}/invocations
+
+  /usuarios:
+    get:
+      summary: "Consultar usuarios"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_usuarios_arn}/invocations
+
+    post:
+      summary: "Crear grado"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_usuarios_arn}/invocations
+  
+  /usuarios/{id}:
+    get:
+      summary: "Obtener usuario por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_usuarios_arn}/invocations
+
+    put:
+      summary: "Actualizar usuario"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_usuarios_arn}/invocations
+
+    delete:
+      summary: "Borrar usuario"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_usuarios_arn}/invocations

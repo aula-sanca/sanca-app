@@ -24,6 +24,11 @@ output "tutores_lambda_arn" {
 }
 
 output "grados_lambda_arn" {
-  description = "ARN de la función Lambda de gragos"
+  description = "ARN de la función Lambda de grados"
   value       = aws_lambda_function.grados_lambda.arn
+}
+
+output "usuarios_lambda_arn" {
+  description = "ARN de la función Lambda de usuarios"
+  value       = aws_lambda_function.usuarios_lambda.arn
 }

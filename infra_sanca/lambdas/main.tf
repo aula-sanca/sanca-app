@@ -55,7 +55,9 @@ resource "aws_iam_policy" "dynamodb_rw_policy" {
           "arn:aws:dynamodb:*:*:table/tutores",
           "arn:aws:dynamodb:*:*:table/tutores/index/*",
           "arn:aws:dynamodb:*:*:table/grados",
-          "arn:aws:dynamodb:*:*:table/grados/index/*"
+          "arn:aws:dynamodb:*:*:table/grados/index/*",
+          "arn:aws:dynamodb:*:*:table/usuarios",
+          "arn:aws:dynamodb:*:*:table/usuarios/index/*"
         ]
       },
       {
@@ -67,7 +69,8 @@ resource "aws_iam_policy" "dynamodb_rw_policy" {
           "arn:aws:dynamodb:*:*:table/maestros",
           "arn:aws:dynamodb:*:*:table/alumnos",
           "arn:aws:dynamodb:*:*:table/tutores",
-          "arn:aws:dynamodb:*:*:table/grados"
+          "arn:aws:dynamodb:*:*:table/grados",
+          "arn:aws:dynamodb:*:*:table/usuarios"
         ]
       }
     ]
@@ -146,10 +149,22 @@ resource "aws_lambda_function" "tutores_lambda" {
 # Lambda grados
 # -------------------------------------------------------------------
 resource "aws_lambda_function" "grados_lambda" {
-  function_name = "tutores_grados"
+  function_name = "grados_lambda"
   role          = aws_iam_role.lambda_exec_role.arn
   handler       = "handler.lambda_handler"
   runtime       = "python3.12"
   filename      = "${path.module}/src/lambda_grados/lambda_grados.zip"
   source_code_hash = filebase64sha256("${path.module}/src/lambda_grados/lambda_grados.zip")
+}
+
+# -------------------------------------------------------------------
+# Lambda usuarios
+# -------------------------------------------------------------------
+resource "aws_lambda_function" "usuarios_lambda" {
+  function_name = "usuarios_lambda"
+  role          = aws_iam_role.lambda_exec_role.arn
+  handler       = "handler.lambda_handler"
+  runtime       = "python3.12"
+  filename      = "${path.module}/src/lambda_usuarios/lambda_usuarios.zip"
+  source_code_hash = filebase64sha256("${path.module}/src/lambda_usuarios/lambda_usuarios.zip")
 }

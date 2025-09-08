@@ -23,4 +23,5 @@ module "apis" {
   alumnos_lambda_arn = module.lambdas.alumnos_lambda_arn
   tutores_lambda_arn = module.lambdas.tutores_lambda_arn
   grados_lambda_arn = module.lambdas.grados_lambda_arn
+  usuarios_lambda_arn = module.lambdas.usuarios_lambda_arn
 }

@@ -214,3 +214,32 @@ resource "aws_dynamodb_table" "asistencias" {
     Project     = "sanca_mvp"
   }
 }
+
+# Tabla de usuarios
+resource "aws_dynamodb_table" "usuarios" {
+  name           = "usuarios"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  attribute {
+    name = "escuelaID"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "escuelaID-index"
+    hash_key        = "escuelaID"
+    projection_type = "ALL"
+  }
+  
+  tags = {
+    Name        = "usuarios"
+    Environment = "dev"
+    Project     = "sanca_mvp"
+  }
+}
