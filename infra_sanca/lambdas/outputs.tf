@@ -32,3 +32,8 @@ output "usuarios_lambda_arn" {
   description = "ARN de la función Lambda de usuarios"
   value       = aws_lambda_function.usuarios_lambda.arn
 }
+
+output "materias_lambda_arn" {
+  description = "ARN de la función Lambda de materias"
+  value       = aws_lambda_function.materias_lambda.arn
+}

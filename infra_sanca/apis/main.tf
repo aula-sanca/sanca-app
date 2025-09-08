@@ -8,7 +8,8 @@ resource "aws_api_gateway_rest_api" "sanca_api" {
     lambda_alumnos_arn = var.alumnos_lambda_arn,
     lambda_tutores_arn = var.tutores_lambda_arn,
     lambda_grados_arn = var.grados_lambda_arn,
-    lambda_usuarios_arn = var.usuarios_lambda_arn
+    lambda_usuarios_arn = var.usuarios_lambda_arn,
+    lambda_materias_arn = var.materias_lambda_arn
   })
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -28,7 +29,8 @@ resource "aws_api_gateway_deployment" "sanca_deploy" {
       lambda_alumnos_arn = var.alumnos_lambda_arn,
       lambda_tutores_arn = var.tutores_lambda_arn,
       lambda_grados_arn = var.grados_lambda_arn,
-      lambda_usuarios_arn = var.usuarios_lambda_arn
+      lambda_usuarios_arn = var.usuarios_lambda_arn,
+      lambda_materias_arn = var.materias_lambda_arn
     }))
   }
 }
@@ -119,6 +121,15 @@ resource "aws_lambda_permission" "apigw_invoke_lambda_usuarios" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = var.usuarios_lambda_arn
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.sanca_api.execution_arn}/*/*"
+}
+
+# Permitir que API Gateway invoque el Lambda
+resource "aws_lambda_permission" "apigw_invoke_lambda_materias" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = var.materias_lambda_arn
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.sanca_api.execution_arn}/*/*"
 }

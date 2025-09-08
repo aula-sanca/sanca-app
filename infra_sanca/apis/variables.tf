@@ -32,3 +32,8 @@ variable "usuarios_lambda_arn" {
   description = "ARN de la función Lambda de usuarios"
   type        = string
 }
+
+variable "materias_lambda_arn" {
+  description = "ARN de la función Lambda de materias"
+  type        = string
+}

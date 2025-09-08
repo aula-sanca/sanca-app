@@ -57,7 +57,9 @@ resource "aws_iam_policy" "dynamodb_rw_policy" {
           "arn:aws:dynamodb:*:*:table/grados",
           "arn:aws:dynamodb:*:*:table/grados/index/*",
           "arn:aws:dynamodb:*:*:table/usuarios",
-          "arn:aws:dynamodb:*:*:table/usuarios/index/*"
+          "arn:aws:dynamodb:*:*:table/usuarios/index/*",
+          "arn:aws:dynamodb:*:*:table/materias",
+          "arn:aws:dynamodb:*:*:table/materias/index/*"
         ]
       },
       {
@@ -70,7 +72,8 @@ resource "aws_iam_policy" "dynamodb_rw_policy" {
           "arn:aws:dynamodb:*:*:table/alumnos",
           "arn:aws:dynamodb:*:*:table/tutores",
           "arn:aws:dynamodb:*:*:table/grados",
-          "arn:aws:dynamodb:*:*:table/usuarios"
+          "arn:aws:dynamodb:*:*:table/usuarios",
+          "arn:aws:dynamodb:*:*:table/materias"
         ]
       }
     ]
@@ -167,4 +170,16 @@ resource "aws_lambda_function" "usuarios_lambda" {
   runtime       = "python3.12"
   filename      = "${path.module}/src/lambda_usuarios/lambda_usuarios.zip"
   source_code_hash = filebase64sha256("${path.module}/src/lambda_usuarios/lambda_usuarios.zip")
+}
+
+# -------------------------------------------------------------------
+# Lambda materias
+# -------------------------------------------------------------------
+resource "aws_lambda_function" "materias_lambda" {
+  function_name = "materias_lambda"
+  role          = aws_iam_role.lambda_exec_role.arn
+  handler       = "handler.lambda_handler"
+  runtime       = "python3.12"
+  filename      = "${path.module}/src/lambda_materias/lambda_materias.zip"
+  source_code_hash = filebase64sha256("${path.module}/src/lambda_materias/lambda_materias.zip")
 }
