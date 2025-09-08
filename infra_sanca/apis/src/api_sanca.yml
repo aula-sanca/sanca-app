@@ -229,3 +229,73 @@ paths:
         type: "aws_proxy"
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_maestros_arn}/invocations
+
+  /alumnos:
+    get:
+      summary: "Consultar alumnos"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_alumnos_arn}/invocations
+
+    post:
+      summary: "Crear alumnos"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_alumnos_arn}/invocations
+
+  /alumnos/{id}:
+    get:
+      summary: "Obtener alumnos por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_alumnos_arn}/invocations
+
+    put:
+      summary: "Actualizar alumnos"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_alumnos_arn}/invocations
+
+    delete:
+      summary: "Borrar alumnos"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_alumnos_arn}/invocations

@@ -9,6 +9,11 @@ output "escuela_lambda_arn" {
 }
 
 output "maestros_lambda_arn" {
-  description = "ARN de la función Lambda de escuela"
+  description = "ARN de la función Lambda de maestros"
   value       = aws_lambda_function.maestros_lambda.arn
+}
+
+output "alumnos_lambda_arn" {
+  description = "ARN de la función Lambda de alumnos"
+  value       = aws_lambda_function.alumnos_lambda.arn
 }
