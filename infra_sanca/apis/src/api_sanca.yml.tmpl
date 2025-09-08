@@ -153,7 +153,7 @@ paths:
         type: "aws_proxy"
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
-  
+
   /escuelas:
     get:
       summary: "Consultar escuelas"
@@ -433,3 +433,73 @@ paths:
         type: "aws_proxy"
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_tutores_arn}/invocations
+
+  /grados:
+    get:
+      summary: "Consultar grados"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_grados_arn}/invocations
+
+    post:
+      summary: "Crear grado"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_grados_arn}/invocations
+
+  /grados/{id}:
+    get:
+      summary: "Obtener grado por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_grados_arn}/invocations
+
+    put:
+      summary: "Actualizar grado"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_grados_arn}/invocations
+
+    delete:
+      summary: "Borrar grado"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_grados_arn}/invocations
