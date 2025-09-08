@@ -41,13 +41,23 @@ paths:
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
-  /asistencias/{id}:
+  /asistencias/{alumnoID}:
     get:
       summary: "Obtener asistencia por ID"
       parameters:
-        - name: "id"
+        - name: "alumnoID"
           in: "path"
           required: true
+          schema:
+            type: string
+        - name: "fecha_desde"
+          in: "path"
+          required: false
+          schema:
+            type: string
+        - name: "fecha_hasta"
+          in: "path"
+          required: false
           schema:
             type: string
       responses:
@@ -90,6 +100,60 @@ paths:
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
 
+  /asistencias/{escuelaID}:
+    get:
+      summary: "Obtener asistencia por ID"
+      parameters:
+        - name: "escuelaID"
+          in: "path"
+          required: true
+          schema:
+            type: string
+        - name: "fecha_desde"
+          in: "path"
+          required: false
+          schema:
+            type: string
+        - name: "fecha_hasta"
+          in: "path"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
+
+  /asistencias/{gradoID}:
+    get:
+      summary: "Obtener asistencia por ID"
+      parameters:
+        - name: "gradoID"
+          in: "path"
+          required: true
+          schema:
+            type: string
+        - name: "fecha_desde"
+          in: "path"
+          required: false
+          schema:
+            type: string
+        - name: "fecha_hasta"
+          in: "path"
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_asistencia_arn}/invocations
+  
   /escuelas:
     get:
       summary: "Consultar escuelas"
@@ -299,3 +363,73 @@ paths:
         type: "aws_proxy"
         httpMethod: "POST"
         uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_alumnos_arn}/invocations
+
+  /tutores:
+    get:
+      summary: "Consultar tutores"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_tutores_arn}/invocations
+
+    post:
+      summary: "Crear tutor"
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_tutores_arn}/invocations
+
+  /tutores/{id}:
+    get:
+      summary: "Obtener tutor por ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_tutores_arn}/invocations
+
+    put:
+      summary: "Actualizar tutor"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_tutores_arn}/invocations
+
+    delete:
+      summary: "Borrar tutor"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        httpMethod: "POST"
+        uri: arn:aws:apigateway:mx-central-1:lambda:path/2015-03-31/functions/${lambda_tutores_arn}/invocations

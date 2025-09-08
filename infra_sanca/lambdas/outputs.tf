@@ -17,3 +17,8 @@ output "alumnos_lambda_arn" {
   description = "ARN de la función Lambda de alumnos"
   value       = aws_lambda_function.alumnos_lambda.arn
 }
+
+output "tutores_lambda_arn" {
+  description = "ARN de la función Lambda de tutores"
+  value       = aws_lambda_function.tutores_lambda.arn
+}

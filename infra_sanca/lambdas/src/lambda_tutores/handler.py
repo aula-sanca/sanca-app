@@ -7,7 +7,7 @@ import datetime
 
 # Inicializa el cliente de DynamoDB
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('asistencias')
+table = dynamodb.Table('tutores')
 
 def mapear_respuesta_dynamo(response):
     """
@@ -90,15 +90,11 @@ def updateRegistro(event:dict)->dict:
 
     try:
         # Extraer la clave primaria (id) y los datos de entrada
-        alumnoID = event.get('pathParameters', {}).get('id')
-        fecha = bodyRq.get("fecha",None)
-        # Replicar la lógica del VTL para la fecha
-        final_fecha = fecha if fecha and fecha.strip() else datetime.datetime.now().isoformat()[:10]
+        id = event.get('pathParameters', {}).get('id')
+        print(f"id: {id}")    
 
-        print(f"alumnoID: {alumnoID}")    
-
-        if not alumnoID or not bodyRq:
-            raise ValueError("alumnoID y los datos de entrada son obligatorios.")
+        if not id or not bodyRq:
+            raise ValueError("id y los datos de entrada son obligatorios.")
 
         # Construir la expresión de actualización dinámicamente
         update_expression_parts = []
@@ -108,7 +104,7 @@ def updateRegistro(event:dict)->dict:
         
         for key, value in bodyRq.items():
             # Excluir claves que no se van a actualizar (como la clave primaria)
-            if key != 'alumnoID' and value is not None:
+            if key != 'id' and value is not None:
                 update_expression_parts.append(f"{key} = :{key}")
                 expression_attribute_values[f":{key}"] = value
 
@@ -126,18 +122,11 @@ def updateRegistro(event:dict)->dict:
         # Realizar la operación de actualización
         response = table.update_item(
             Key={
-                'alumnoID': alumnoID,
-                'fecha': final_fecha
+                'id': id
             },
-            UpdateExpression="SET #estado = :estado, #updatedAt = :updatedAt",
-            ExpressionAttributeNames={
-                "#estado": "estado",
-                "#updatedAt": "updatedAt"
-            },
-            ExpressionAttributeValues={
-                ':estado': bodyRq.get('estado'),
-                ':updatedAt': datetime.datetime.now().isoformat()
-            },
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values,
+            ConditionExpression="attribute_exists(id)",
             ReturnValues="ALL_NEW"
         )
         
@@ -149,7 +138,7 @@ def updateRegistro(event:dict)->dict:
         # Manejar el error de condición, que ocurre si el ítem no existe
         
         if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
-            print(f"Error: El registro con alumnoID '{alumnoID}' no existe y no se puede actualizar.")
+            print(f"Error: El registro con id '{id}' no existe y no se puede actualizar.")
             bodyRs = {
                     "error": "Registro no encontrado",
                     "message": "No se encontró el registro para el 'id' especificado."
@@ -176,7 +165,7 @@ def listRegistros(event:dict)->dict:
         response = table.scan()
         bodyRs  = mapear_respuesta_dynamo(response)
         bodyRs = {
-            "asistencias": bodyRs["items"]
+            "tutores": bodyRs["items"]
         }
         
         # Retorna los items encontrados
@@ -196,105 +185,6 @@ def listRegistros(event:dict)->dict:
                 "message": "Error inesperado."
             }
         
-def listRegistrosPorId(event:dict)->dict:
-    
-    try:
-        
-        alumnoID = event.get('pathParameters', {}).get('alumnoID',None)
-        escuelaID = event.get('pathParameters', {}).get('escuelaID',None)
-        gradoID = event.get('pathParameters', {}).get('gradoID',None)
-
-        print(f"alumnoID: {alumnoID}")
-        print(f"escuelaID: {escuelaID}")
-        print(f"gradoID: {gradoID}")
-        
-        if event.get("queryStringParameters",None):
-            fecha_desde = event.get("queryStringParameters",{}).get('fecha_desde',None)
-            fecha_hasta = event.get("queryStringParameters",{}).get('fecha_hasta',None)
-        else:
-            fecha_desde = None
-            fecha_hasta = None
-        print(f"fecha_desde: {fecha_desde}")
-        print(f"fecha_hasta: {fecha_hasta}")
-
-        if not alumnoID and not escuelaID and not gradoID:
-            return {"statusCode": 400, "body": "Debe indicar alumnoID, escuelaID or gradoID"}
-
-        if alumnoID:
-            # Caso 1: Si se reciben fecha_desde y fecha_hasta diferentes -> usar between
-            if fecha_desde and fecha_hasta and fecha_desde != fecha_hasta:
-                response = table.query(
-                    KeyConditionExpression=Key("alumnoID").eq(alumnoID) & Key("fecha").between(fecha_desde, fecha_hasta)
-                )
-
-            # Caso 2: Si solo viene fecha_desde o ambas son iguales -> buscar ese día
-            elif fecha_desde:
-                response = table.query(
-                    KeyConditionExpression=Key("alumnoID").eq(alumnoID) & Key("fecha").eq(fecha_desde)
-                )
-
-            # Caso 3: Solo alumnoID (sin rango de fechas)
-            else:
-                response = table.query(
-                    KeyConditionExpression=Key("alumnoID").eq(alumnoID)
-                )
-
-        elif escuelaID:
-            if fecha_desde and fecha_hasta and fecha_desde != fecha_hasta:
-                response = table.query(
-                    IndexName="escuelaID-fecha-index",
-                    KeyConditionExpression=Key("escuelaID").eq(escuelaID) & Key("fecha").between(fecha_desde, fecha_hasta)
-                )
-            elif fecha_desde:
-                response = table.query(
-                    IndexName="escuelaID-fecha-index",
-                    KeyConditionExpression=Key("escuelaID").eq(escuelaID) & Key("fecha").eq(fecha_desde)
-                )
-            else:
-                response = table.query(
-                    IndexName="escuelaID-fecha-index",
-                    KeyConditionExpression=Key("escuelaID").eq(escuelaID)
-                )
-
-        elif gradoID:
-            if fecha_desde and fecha_hasta and fecha_desde != fecha_hasta:
-                response = table.query(
-                    IndexName="gradoID-fecha-index",
-                    KeyConditionExpression=Key("gradoID").eq(escuelaID) & Key("fecha").between(fecha_desde, fecha_hasta)
-                )
-            elif fecha_desde:
-                response = table.query(
-                    IndexName="gradoID-fecha-index",
-                    KeyConditionExpression=Key("gradoID").eq(escuelaID) & Key("fecha").eq(fecha_desde)
-                )
-            else:
-                response = table.query(
-                    IndexName="gradoID-fecha-index",
-                    KeyConditionExpression=Key("gradoID").eq(escuelaID)
-                )
-
-        # Devuelve la lista de elementos encontrados
-        print(f"response: {response.get('Items', [])}")
-        return response.get('Items', [])
-
-    except ClientError as e:
-        print(f"Error al consultar DynamoDB: {e.response['Error']['Message']}")
-        return {
-            "statusCode": 500,
-            "body": json.dumps({
-                "error": "Error interno",
-                "message": "Ocurrió un error al procesar la consulta."
-            })
-        }
-    except Exception as e:
-        print(f"Error inesperado: {str(e)}")
-        return {
-            "statusCode": 500,
-            "body": json.dumps({
-                "error": "Error inesperado",
-                "message": "Ocurrió un error inesperado al procesar la solicitud."
-            })
-        }
 
 def getId(event:dict)->dict:
    
@@ -308,7 +198,7 @@ def getId(event:dict)->dict:
         # Realiza la operación GetItem para obtener un solo registro
         response = table.get_item(
             Key={
-                'alumnoID': id
+                'id': id
             }
         )
         
@@ -329,6 +219,7 @@ def getId(event:dict)->dict:
                 "message": "Ocurrió un error inesperado al procesar la solicitud."
             }
         
+
 def deleteRegistro(event:dict)->dict:
     
     try:
@@ -380,46 +271,43 @@ def deleteRegistro(event:dict)->dict:
                 "message": "Ocurrió un error inesperado al procesar la solicitud."
             }
         
+
 def lambda_handler(event, context):
     print(f"event: {event}")
     method = event.get("httpMethod")
     path = event.get("path")
     
-    if method == "GET" and path == "/asistencias":
+    if method == "GET" and path == "/tutores":
         body_response = listRegistros(event)
         return {
             "statusCode": 200,
             "body": json.dumps(body_response)
         }
     
-    elif method == "POST" and path == "/asistencias":
+    elif method == "POST" and path == "/tutores":
         body_response = createRegistro(event)
         return {
             "statusCode": 200,
             "body": json.dumps(body_response)
         }
-    
     elif method == "GET":
-        body_response = listRegistrosPorId(event)
+        body_response = getId(event)
         return {
             "statusCode": 200,
             "body": json.dumps(body_response)
         }
-    
     elif method == "PUT":
         body_response = updateRegistro(event)
         return {
             "statusCode": 200,
             "body": json.dumps(body_response)
         }
-    
     elif method == "DELETE":
         body_response = deleteRegistro(event)
         return {
             "statusCode": 200,
             "body": json.dumps(body_response)
         }
-    
     else:  
         body_response = {
             "error_code": "0001",

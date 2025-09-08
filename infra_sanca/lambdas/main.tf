@@ -51,7 +51,9 @@ resource "aws_iam_policy" "dynamodb_rw_policy" {
           "arn:aws:dynamodb:*:*:table/maestros",
           "arn:aws:dynamodb:*:*:table/maestros/index/*",
           "arn:aws:dynamodb:*:*:table/alumnos",
-          "arn:aws:dynamodb:*:*:table/alumnos/index/*"
+          "arn:aws:dynamodb:*:*:table/alumnos/index/*",
+          "arn:aws:dynamodb:*:*:table/tutores",
+          "arn:aws:dynamodb:*:*:table/tutores/index/*"
         ]
       },
       {
@@ -61,7 +63,8 @@ resource "aws_iam_policy" "dynamodb_rw_policy" {
           "arn:aws:dynamodb:*:*:table/asistencias",
           "arn:aws:dynamodb:*:*:table/escuelas",
           "arn:aws:dynamodb:*:*:table/maestros",
-          "arn:aws:dynamodb:*:*:table/alumnos"
+          "arn:aws:dynamodb:*:*:table/alumnos",
+          "arn:aws:dynamodb:*:*:table/tutores"
         ]
       }
     ]
@@ -122,4 +125,16 @@ resource "aws_lambda_function" "alumnos_lambda" {
   runtime       = "python3.12"
   filename      = "${path.module}/src/lambda_alumnos/lambda_alumnos.zip"
   source_code_hash = filebase64sha256("${path.module}/src/lambda_alumnos/lambda_alumnos.zip")
+}
+
+# -------------------------------------------------------------------
+# Lambda alumnos
+# -------------------------------------------------------------------
+resource "aws_lambda_function" "tutores_lambda" {
+  function_name = "tutores_lambda"
+  role          = aws_iam_role.lambda_exec_role.arn
+  handler       = "handler.lambda_handler"
+  runtime       = "python3.12"
+  filename      = "${path.module}/src/lambda_tutores/lambda_tutores.zip"
+  source_code_hash = filebase64sha256("${path.module}/src/lambda_tutores/lambda_tutores.zip")
 }

@@ -17,3 +17,8 @@ variable "alumnos_lambda_arn" {
   description = "ARN de la función Lambda de alumnos"
   type        = string
 }
+
+variable "tutores_lambda_arn" {
+  description = "ARN de la función Lambda de tutores"
+  type        = string
+}
